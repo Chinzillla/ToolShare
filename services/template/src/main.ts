@@ -9,7 +9,7 @@ async function bootstrap() {
   });
 
   app.useLogger(app.get(Logger));
-
+  app.enableShutdownHooks();
   await app.listen(env.PORT);
 }
 bootstrap();
