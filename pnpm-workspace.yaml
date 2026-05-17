@@ -3,3 +3,6 @@ packages:
   - "services/*"
   - "packages/*"
   - "infra/*"
+allowBuilds:
+  '@nestjs/core': true
+  unrs-resolver: true
