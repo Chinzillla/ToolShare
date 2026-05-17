@@ -34,3 +34,10 @@ coverage/
 Thumbs.db
 .vscode/
 .idea/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!.tfvars.example
