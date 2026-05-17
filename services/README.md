@@ -1,43 +1,5 @@
-# Dependencies
-node_modules/
-.pnpm-store/
+# Services
 
-# Environment / secrets
-.env
-.env.*
-!.env.example
-/.npmrc
+Backend services live here.
 
-# Logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build outputs
-dist/
-build/
-out/
-.next/
-coverage/
-
-# Tool caches
-.turbo/
-.nx/
-.vite/
-.cache/
-*.tsbuildinfo
-
-# OS / editor files
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.*
-*.tfvars
-!.tfvars.example
+Use `services/template` as the starting point for new NestJS TypeScript services. Do not add business logic directly to the template.
