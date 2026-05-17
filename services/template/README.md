@@ -31,7 +31,7 @@ Invalid values fail fast during startup.
 Run commands from the repository root.
 
 ```bash
-pnpm --filter template start:dev
+pnpm --filter @toolshare/service-template start:dev
 ```
 
 Health check:
@@ -54,9 +54,9 @@ Expected response:
 ## Checks
 
 ```bash
-pnpm --filter template test
-pnpm --filter template build
-pnpm --filter template test:e2e
+pnpm --filter @toolshare/service-template test
+pnpm --filter @toolshare/service-template build
+pnpm --filter @toolshare/service-template test:e2e
 ```
 
 ## Docker
