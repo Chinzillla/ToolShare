@@ -1,0 +1,40 @@
+name: Bug Report
+description: Let us know that something does not work as expected.
+title: "[Bug]: Please title this bug report"
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the issue
+      description: What happened, and what did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce the problem
+      description: It is important that we are able to reproduce the problem that you are experiencing. Please provide all code and relevant steps to reproduce the problem, including your `BUILD`/`CMakeLists.txt` file and build commands. Links to a GitHub branch or [godbolt.org](https://godbolt.org/) that demonstrate the problem are also helpful.
+    validations:
+      required: true
+  - type: textarea
+    id: os
+    attributes:
+      label: Describe your environment
+      description: If you are using a Linux distribution please include the name and version of the distribution as well. Please make sure to add any compiler versions
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues before opening this one.
+        - label: I included enough context for someone else to understand the request.
+        - label: I added reproduction steps, examples, logs, or screenshots where relevant.
