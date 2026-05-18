@@ -3,6 +3,8 @@ dist/
 node_modules/
 build/
 .pnpm-store/
+.venv/
+__pycache__/
 
 # Logs
 logs
