@@ -64,7 +64,7 @@ pnpm --filter @toolshare/service-template test:e2e
 Build the image from the repository root:
 
 ```bash
-docker build -f services/template/Dockerfile -t toolshare-service-template .
+docker build -f services/nestjs-template/Dockerfile -t toolshare-service-template .
 ```
 
 Run the container:
@@ -81,7 +81,7 @@ http://localhost:3000/health
 
 ## Creating A New Service From This Template
 
-1. Copy `services/template` to `services/<service-name>`.
+1. Copy `services/nestjs-template` to `services/<service-name>`.
 2. Rename the package in the copied `package.json`.
 3. Update the `service` value returned by the health service.
 4. Update Docker image names and filter commands for the new package.

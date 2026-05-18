@@ -207,7 +207,7 @@ importers:
 
   .: {}
 
-  services/template:
+  services/nestjs-template:
     dependencies:
       '@nestjs/common':
         specifier: 11.1.21
