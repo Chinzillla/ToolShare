@@ -18,9 +18,9 @@ def load_settings() -> Settings:
             log_level=os.getenv("LOG_LEVEL", "INFO").upper(),
         )
 
-    except ValueError as exc:
-        raise RuntimeError("Invalid numeric environment variable") from exc
     except ValidationError as exc:
         raise RuntimeError(f"Invalid service configuration: {exc}") from exc
+    except ValueError as exc:
+        raise RuntimeError("Invalid numeric environment variable") from exc
 
 settings = load_settings()
