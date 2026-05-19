@@ -1,4 +1,4 @@
-# NestJS Service Template
+# nestjs-template
 
 This directory is a reusable NestJS service template for TypeScript services.
 
@@ -56,7 +56,7 @@ pnpm --filter @toolshare/nestjs-template test:e2e
 Build the image from the repository root:
 
 ```bash
-docker build -f services/nestjs-template/Dockerfile -t toolshare-nestjs-template .
+docker build -f services/nestjs-template/Dockerfile -t toolshare-nestjs-template services/nestjs-template
 ```
 
 Run the container:
