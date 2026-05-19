@@ -51,6 +51,12 @@ docker build -f services/fastapi-template/Dockerfile -t toolshare-fastapi-templa
 docker run --rm -p 8000:8000 toolshare-fastapi-template
 ```
 
+Health check path:
+
+```text
+/health
+```
+
 Then open:
 
 ```text
