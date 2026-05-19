@@ -3,6 +3,8 @@ dist/
 node_modules/
 build/
 .pnpm-store/
+.venv/
+__pycache__/
 
 # Logs
 logs
@@ -30,11 +32,12 @@ lerna-debug.log*
 *.sublime-workspace
 
 # IDE - VSCode
-.vscode/*
+.vscode
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+postman/
 
 # dotenv environment variable files
 .env

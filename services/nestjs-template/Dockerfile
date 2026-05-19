@@ -1,26 +1,23 @@
 FROM node:24-alpine AS base
 WORKDIR /app
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@11.1.2 --activate
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY services/nestjs-template/package.json services/nestjs-template/package.json
-RUN pnpm install --filter @toolshare/service-template --frozen-lockfile
+COPY package.json pnpm-workspace.yaml ./
+RUN pnpm install --no-frozen-lockfile
 
 FROM deps AS build
-COPY services/nestjs-template/nest-cli.json services/nestjs-template/tsconfig*.json services/nestjs-template/
-COPY services/nestjs-template/src services/nestjs-template/src
-RUN pnpm --filter @toolshare/service-template build
+COPY nest-cli.json tsconfig*.json ./
+COPY src ./src
+RUN pnpm build
 
 FROM base AS runtime
 ENV NODE_ENV=production
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY services/nestjs-template/package.json services/nestjs-template/package.json
-RUN pnpm install --filter @toolshare/service-template --prod --frozen-lockfile
+COPY package.json pnpm-workspace.yaml ./
+RUN pnpm install --prod --no-frozen-lockfile
 
-WORKDIR /app/services/nestjs-template
-COPY --from=build /app/services/nestjs-template/dist ./dist
+COPY --from=build /app/dist ./dist
 
 EXPOSE 3000
 
