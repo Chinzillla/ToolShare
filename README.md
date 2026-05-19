@@ -135,13 +135,4 @@ All production code is written, reviewed, and approved by human engineer(s) or p
 
 AI-generated suggestions are only used when they are understood, verified, and intentionally implemented. Code is not copied blindly from AI tools, and no feature is considered complete simply because an AI system produced an output.
 
-Our engineering standards include:
-
-- Human review of code changes
-- Clear understanding of how the code works
-- Review for maintainability and readability
-- Testing where appropriate
-- Security and reliability considerations
-- Rejection of code that is unclear, fragile, or unverified
-
 AI may assist the workflow, but it does not replace engineering judgment.
