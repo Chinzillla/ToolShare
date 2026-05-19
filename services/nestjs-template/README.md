@@ -1,22 +1,16 @@
-# ToolShare NestJS Service Template
+# NestJS Service Template
 
-This directory is a reusable NestJS service template for ToolShare TypeScript services, including the future API Gateway. Copy this template when creating a new backend service, then rename the package and update service-specific details.
-
-The template intentionally contains no ToolShare business logic.
-
-## Included
-
-- `GET /health` health endpoint
-- Zod environment validation
-- Structured JSON logging with `nestjs-pino`
-- Graceful shutdown hooks
-- Jest unit test scaffold
-- Docker build support
-- Exact dependency versions for repeatable installs
+This directory is a reusable NestJS service template for TypeScript services.
 
 ## Environment
 
-The service validates these environment variables at startup:
+Copy `.env.example` when you need local environment values.
+
+```env
+NODE_ENV=development
+PORT=3000
+LOG_LEVEL=info
+```
 
 | Name | Default | Allowed values |
 | --- | --- | --- |
@@ -24,14 +18,12 @@ The service validates these environment variables at startup:
 | `PORT` | `3000` | Positive integer |
 | `LOG_LEVEL` | `info` | `fatal`, `error`, `warn`, `info`, `debug`, `trace` |
 
-Invalid values fail fast during startup.
-
 ## Local Development
 
 Run commands from the repository root.
 
 ```bash
-pnpm --filter @toolshare/service-template start:dev
+pnpm --filter @toolshare/nestjs-template start:dev
 ```
 
 Health check:
@@ -45,7 +37,7 @@ Expected response:
 ```json
 {
   "status": "ok",
-  "service": "service-template",
+  "service": "nestjs-template",
   "uptime": 1.23,
   "timestamp": "2026-05-17T00:00:00.000Z"
 }
@@ -54,9 +46,9 @@ Expected response:
 ## Checks
 
 ```bash
-pnpm --filter @toolshare/service-template test
-pnpm --filter @toolshare/service-template build
-pnpm --filter @toolshare/service-template test:e2e
+pnpm --filter @toolshare/nestjs-template test
+pnpm --filter @toolshare/nestjs-template build
+pnpm --filter @toolshare/nestjs-template test:e2e
 ```
 
 ## Docker
@@ -64,13 +56,13 @@ pnpm --filter @toolshare/service-template test:e2e
 Build the image from the repository root:
 
 ```bash
-docker build -f services/nestjs-template/Dockerfile -t toolshare-service-template .
+docker build -f services/nestjs-template/Dockerfile -t toolshare-nestjs-template .
 ```
 
 Run the container:
 
 ```bash
-docker run --rm -p 3000:3000 toolshare-service-template
+docker run --rm -p 3000:3000 toolshare-nestjs-template
 ```
 
 Then visit:
@@ -81,11 +73,6 @@ http://localhost:3000/health
 
 ## Creating A New Service From This Template
 
-1. Copy `services/nestjs-template` to `services/<service-name>`.
-2. Rename the package in the copied `package.json`.
-3. Update the `service` value returned by the health service.
-4. Update Docker image names and filter commands for the new package.
-5. Add service-specific modules, controllers, and providers.
-6. Keep the health route, config validation, structured logging, graceful shutdown, and tests.
-
-Do not add shared business logic to this template. Shared code should live in `packages/` when needed.
+1. Copy the template nestjs-template folder and rename it to the service you want to use
+2. Search and replace nestjs-template to your service name
+3. Keep the health route, config validation, structured logging, graceful shutdown, and tests.
