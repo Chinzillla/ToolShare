@@ -1,0 +1,67 @@
+name: Service Templates CI
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nestjs-template:
+    name: NestJS template
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.1.2 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
+        run: pnpm --filter @toolshare/nestjs-template test
+
+      - name: Build
+        run: pnpm --filter @toolshare/nestjs-template build
+
+      - name: Run e2e tests
+        run: pnpm --filter @toolshare/nestjs-template test:e2e
+
+      - name: Build Docker image
+        run: docker build -f services/nestjs-template/Dockerfile -t toolshare-nestjs-template services/nestjs-template
+
+  fastapi-template:
+    name: FastAPI template
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14.3"
+
+      - name: Install dependencies
+        working-directory: services/fastapi-template
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        working-directory: services/fastapi-template
+        run: python -m pytest
+
+      - name: Build Docker image
+        run: docker build -f services/fastapi-template/Dockerfile -t toolshare-fastapi-template services/fastapi-template

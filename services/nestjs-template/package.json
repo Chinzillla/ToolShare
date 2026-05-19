@@ -1,6 +1,7 @@
 {
-  "name": "@toolshare/service-template",
+  "name": "@toolshare/nestjs-template",
   "version": "0.0.1",
+  "packageManager": "pnpm@11.1.2",
   "description": "",
   "author": "",
   "private": true,

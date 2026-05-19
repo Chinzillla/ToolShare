@@ -5,7 +5,7 @@ export class HealthService {
     getHealth() {
         return {
             status: 'ok',
-            service: 'service-template',
+            service: 'nestjs-template',
             uptime: process.uptime(),
             timestamp: new Date().toISOString(),
         };
