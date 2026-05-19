@@ -12,4 +12,4 @@ async function bootstrap() {
   app.enableShutdownHooks();
   await app.listen(env.PORT);
 }
-bootstrap();
+void bootstrap();
