@@ -2,6 +2,7 @@ import pytest
 
 from app.config import load_settings
 
+
 def test_default_config_loads(monkeypatch):
     monkeypatch.setenv("SERVICE_NAME", "fastapi-template")
     monkeypatch.setenv("ENVIRONMENT", "development")
@@ -15,6 +16,7 @@ def test_default_config_loads(monkeypatch):
     assert settings.port == 8000
     assert settings.log_level == "INFO"
 
+
 def test_invalid_port_fails(monkeypatch):
     monkeypatch.setenv("SERVICE_NAME", "fastapi-template")
     monkeypatch.setenv("ENVIRONMENT", "development")
@@ -24,6 +26,7 @@ def test_invalid_port_fails(monkeypatch):
     with pytest.raises(RuntimeError, match="Invalid service configuration"):
         load_settings()
 
+
 def test_invalid_environment_fails(monkeypatch):
     monkeypatch.setenv("SERVICE_NAME", "fastapi-template")
     monkeypatch.setenv("ENVIRONMENT", "staging")
@@ -32,6 +35,7 @@ def test_invalid_environment_fails(monkeypatch):
 
     with pytest.raises(RuntimeError, match="Invalid service configuration"):
         load_settings()
+
 
 def test_missing_config_fails(monkeypatch):
     monkeypatch.delenv("SERVICE_NAME", raising=False)

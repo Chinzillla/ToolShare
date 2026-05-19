@@ -1,7 +1,8 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import Field, ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     service_name: str = Field(alias="SERVICE_NAME")
@@ -14,10 +15,12 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+
 def load_settings() -> Settings:
     try:
         return Settings()
     except ValidationError as exc:
         raise RuntimeError(f"Invalid service configuration: {exc}") from exc
+
 
 settings = load_settings()

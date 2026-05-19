@@ -18,6 +18,7 @@ app.include_router(health_router)
 
 logger = logging.getLogger("app.request")
 
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     started_at = time.perf_counter()

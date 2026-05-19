@@ -30,6 +30,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check TypeScript lint
+        run: pnpm --filter @toolshare/nestjs-template lint:check
+
+      - name: Check TypeScript formatting
+        run: pnpm --filter @toolshare/nestjs-template format:check
+
       - name: Run unit tests
         run: pnpm --filter @toolshare/nestjs-template test
 
@@ -58,6 +64,14 @@ jobs:
       - name: Install dependencies
         working-directory: services/fastapi-template
         run: pip install -r requirements-dev.txt
+
+      - name: Check Python lint
+        working-directory: services/fastapi-template
+        run: python -m ruff check .
+
+      - name: Check Python formatting
+        working-directory: services/fastapi-template
+        run: python -m ruff format --check .
 
       - name: Run tests
         working-directory: services/fastapi-template

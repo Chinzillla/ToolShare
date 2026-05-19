@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { HealthResponse } from './health.types';
 
 @Injectable()
 export class HealthService {
-    getHealth() {
-        return {
-            status: 'ok',
-            service: 'nestjs-template',
-            uptime: process.uptime(),
-            timestamp: new Date().toISOString(),
-        };
-    }
+  getHealth(): HealthResponse {
+    return {
+      status: 'ok',
+      service: 'nestjs-template',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
