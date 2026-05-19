@@ -13,11 +13,15 @@ RUN pnpm build
 
 FROM base AS runtime
 ENV NODE_ENV=production
+ENV PORT=3000
+ENV LOG_LEVEL=info
 
-COPY package.json pnpm-workspace.yaml ./
+COPY --chown=node:node package.json pnpm-workspace.yaml ./
 RUN pnpm install --prod --no-frozen-lockfile
 
-COPY --from=build /app/dist ./dist
+COPY --chown=node:node --from=build /app/dist ./dist
+
+USER node
 
 EXPOSE 3000
 

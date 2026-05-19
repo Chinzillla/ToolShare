@@ -65,6 +65,12 @@ Run the container:
 docker run --rm -p 3000:3000 toolshare-nestjs-template
 ```
 
+Health check path:
+
+```text
+/health
+```
+
 Then visit:
 
 ```text
