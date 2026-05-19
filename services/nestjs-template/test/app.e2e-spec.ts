@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+import type { HealthResponse } from '../src/health/health.types';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -21,8 +22,10 @@ describe('AppController (e2e)', () => {
       .get('/health')
       .expect(200)
       .expect((res) => {
-        expect(res.body.status).toBe('ok');
-        expect(res.body.service).toBe('nestjs-template');
+        const body = res.body as HealthResponse;
+
+        expect(body.status).toBe('ok');
+        expect(body.service).toBe('nestjs-template');
       });
   });
 

@@ -1,9 +1,12 @@
 from datetime import datetime
+
 from fastapi.testclient import TestClient
-from app.main import app
+
 from app.config import settings
+from app.main import app
 
 client = TestClient(app)
+
 
 def test_health_route_returns_ok_response():
     response = client.get("/health")
@@ -18,7 +21,8 @@ def test_health_route_returns_ok_response():
     assert body["uptime"] >= 0
 
     datetime.fromisoformat(body["timestamp"])
-    
+
+
 def test_health_route_is_in_openapi_schema():
     response = client.get("/openapi.json")
 

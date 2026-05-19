@@ -117,6 +117,55 @@ Users can view:
 - Rental requests they received
 - Their reputation rating
 
+## Development Commands
+
+### TypeScript services
+
+Run lint checks:
+
+```powershell
+corepack pnpm --filter @toolshare/nestjs-template lint:check
+```
+
+Run formatting checks:
+
+```powershell
+corepack pnpm --filter @toolshare/nestjs-template format:check
+```
+
+Apply formatting:
+
+```powershell
+corepack pnpm --filter @toolshare/nestjs-template format
+```
+
+### Python services
+
+Install development dependencies:
+
+```powershell
+cd services/fastapi-template
+.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+```
+
+Run lint checks:
+
+```powershell
+.venv\Scripts\python.exe -m ruff check .
+```
+
+Run formatting checks:
+
+```powershell
+.venv\Scripts\python.exe -m ruff format --check .
+```
+
+Apply formatting:
+
+```powershell
+.venv\Scripts\python.exe -m ruff format .
+```
+
 ## Contributing
 
 This is an open source project.

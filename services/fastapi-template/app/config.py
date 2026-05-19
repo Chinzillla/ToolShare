@@ -1,26 +1,26 @@
-import os
 from typing import Literal
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import Field, ValidationError
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings(BaseModel):
-    service_name: str = Field(default="fastapi-template")
-    environment: Literal["development", "test", "production"] = "development"
-    port: int = Field(default=8000, ge=1, le=65535)
-    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+
+class Settings(BaseSettings):
+    service_name: str = Field(alias="SERVICE_NAME")
+    environment: Literal["development", "test", "production"] = Field(alias="ENVIRONMENT")
+    port: int = Field(alias="PORT", ge=1, le=65535)
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = Field(alias="LOG_LEVEL")
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
+
 
 def load_settings() -> Settings:
     try:
-        return Settings(
-            service_name=os.getenv("SERVICE_NAME", "fastapi-template"),
-            environment=os.getenv("ENVIRONMENT", "development"),
-            port=int(os.getenv("PORT", "8000")),
-            log_level=os.getenv("LOG_LEVEL", "INFO").upper(),
-        )
-
+        return Settings()
     except ValidationError as exc:
         raise RuntimeError(f"Invalid service configuration: {exc}") from exc
-    except ValueError as exc:
-        raise RuntimeError("Invalid numeric environment variable") from exc
+
 
 settings = load_settings()
