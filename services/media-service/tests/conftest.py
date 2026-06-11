@@ -6,8 +6,8 @@ os.environ.setdefault("PORT", "8000")
 os.environ.setdefault("LOG_LEVEL", "INFO")
 
 os.environ.setdefault("MINIO_ENDPOINT", "localhost:9000")
-os.environ.setdefault("MINIO_ACCESS_KEY", "test-access-key")
-os.environ.setdefault("MINIO_SECRET_KEY", "test-secret-key")
+os.environ.setdefault("MINIO_ACCESS_KEY", "toolshare")
+os.environ.setdefault("MINIO_SECRET_KEY", "toolshare-local-minio")
 os.environ.setdefault("MINIO_USE_SSL", "false")
 
 os.environ.setdefault(
