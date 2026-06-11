@@ -15,18 +15,10 @@ class Settings(BaseSettings):
     minio_secret_key: str = Field(alias="MINIO_SECRET_KEY")
     minio_use_ssl: bool = Field(alias="MINIO_USE_SSL")
 
-    minio_equipment_photos_bucket: str = Field(
-        alias="MINIO_EQUIPMENT_PHOTOS_BUCKET"
-    )
-    minio_pickup_photos_bucket: str = Field(
-        alias="MINIO_PICKUP_PHOTOS_BUCKET"
-    )
-    minio_return_photos_bucket: str = Field(
-        alias="MINIO_RETURN_PHOTOS_BUCKET"
-    )
-    minio_dispute_evidence_bucket: str = Field(
-        alias="MINIO_DISPUTE_EVIDENCE_BUCKET"
-    )
+    minio_equipment_photos_bucket: str = Field(alias="MINIO_EQUIPMENT_PHOTOS_BUCKET")
+    minio_pickup_photos_bucket: str = Field(alias="MINIO_PICKUP_PHOTOS_BUCKET")
+    minio_return_photos_bucket: str = Field(alias="MINIO_RETURN_PHOTOS_BUCKET")
+    minio_dispute_evidence_bucket: str = Field(alias="MINIO_DISPUTE_EVIDENCE_BUCKET")
 
     # Signed url expiry 1 to 60 minutes
     minio_signed_url_expiry_seconds: int = Field(
@@ -35,9 +27,15 @@ class Settings(BaseSettings):
         le=3600,
     )
 
-def load_settings() -> Settings:
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
+
+
+def load_settings(*, env_file: str | None = ".env") -> Settings:
     try:
-        return Settings()
+        return Settings(_env_file=env_file)
     except ValidationError as exc:
         raise RuntimeError(f"Invalid service configuration: {exc}") from exc
 
