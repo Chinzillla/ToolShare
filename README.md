@@ -123,19 +123,19 @@ Users can view:
 
 Run lint checks:
 
-```powershell
+```shell
 corepack pnpm --filter @toolshare/nestjs-template lint:check
 ```
 
 Run formatting checks:
 
-```powershell
+```shell
 corepack pnpm --filter @toolshare/nestjs-template format:check
 ```
 
 Apply formatting:
 
-```powershell
+```shell
 corepack pnpm --filter @toolshare/nestjs-template format
 ```
 
@@ -164,6 +164,18 @@ Apply formatting:
 
 ```powershell
 .venv\Scripts\python.exe -m ruff format .
+```
+
+### Database Services
+
+Reset Local Databases:
+```shell
+pnpm db:reset --yes
+```
+
+Run Database Integration Test:
+```shell
+pnpm db:test
 ```
 
 ## Contributing

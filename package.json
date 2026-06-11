@@ -6,7 +6,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db:reset": "node scripts/reset-local-databases.mjs"
+    "db:reset": "node scripts/reset-local-databases.mjs",
+    "db:test": "node --test scripts/test-local-databases.mjs"
   },
   "keywords": [],
   "author": "",
