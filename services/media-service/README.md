@@ -1,73 +1,128 @@
-# FastAPI Service Template
+# Media Service
 
-This directory is a reusable FastAPI template for Python services
+FastAPI service for managing ToolShare media storage. Files are stored in private
+MinIO buckets and accessed through time-limited signed URLs.
 
-## Environment
+## Buckets
 
-```env
-SERVICE_NAME=media-service
-ENVIRONMENT=development
-PORT=8000
-LOG_LEVEL=INFO
-```
+| Bucket | Purpose |
+| --- | --- |
+| `equipment-photos` | Equipment listing photos |
+| `pickup-photos` | Equipment condition at pickup |
+| `return-photos` | Equipment condition at return |
+| `dispute-evidence` | Evidence attached to disputes |
 
-Valid `ENVIRONMENT` values are `development`, `test`, and `production`.
+The local infrastructure bootstrap creates these buckets and disables anonymous
+access.
 
-Valid `LOG_LEVEL` values are `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL`.
+## Local Setup
 
-## Local Development
-
-From `services/media-service`:
+Start MinIO and create the required buckets from the repository root:
 
 ```bash
+docker compose -f infra/docker-compose.yml up -d --build minio
+docker compose -f infra/docker-compose.yml run --rm minio-bootstrap
+```
+
+Configure and start the service:
+
+```bash
+cd services/media-service
 python -m venv .venv
-.venv/Scripts/activate
-python -m pip install --upgrade pip
-pip install -r requirements-dev.txt
-uvicorn app.main:app --reload --port 8000
+```
+
+On Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+Copy-Item .env.example .env
+python -m pip install -r requirements-dev.txt
+python -m uvicorn app.main:app --reload
+```
+
+On macOS or Linux:
+
+```bash
+source .venv/bin/activate
+cp .env.example .env
+python -m pip install -r requirements-dev.txt
+python -m uvicorn app.main:app --reload
 ```
 
 Open:
 
-```text
-http://localhost:8000/health
-http://localhost:8000/docs
-http://localhost:8000/openapi.json
-```
+- Health check: <http://localhost:8000/health>
+- OpenAPI documentation: <http://localhost:8000/docs>
+- OpenAPI schema: <http://localhost:8000/openapi.json>
+- MinIO console: <http://localhost:9001>
 
-## Tests
+## Configuration
+
+The service validates all configuration at startup. Missing or invalid values
+cause a clear startup failure.
+
+| Variable | Description | Local example |
+| --- | --- | --- |
+| `SERVICE_NAME` | Service name used in logs and health responses | `media-service` |
+| `ENVIRONMENT` | `development`, `test`, or `production` | `development` |
+| `PORT` | HTTP server port | `8000` |
+| `LOG_LEVEL` | Python logging level | `INFO` |
+| `MINIO_ENDPOINT` | MinIO host and port without a URL scheme | `localhost:9000` |
+| `MINIO_ACCESS_KEY` | MinIO access key | `toolshare` |
+| `MINIO_SECRET_KEY` | MinIO secret key | Local development value |
+| `MINIO_USE_SSL` | Whether the MinIO connection uses TLS | `false` |
+| `MINIO_EQUIPMENT_PHOTOS_BUCKET` | Equipment photo bucket | `equipment-photos` |
+| `MINIO_PICKUP_PHOTOS_BUCKET` | Pickup photo bucket | `pickup-photos` |
+| `MINIO_RETURN_PHOTOS_BUCKET` | Return photo bucket | `return-photos` |
+| `MINIO_DISPUTE_EVIDENCE_BUCKET` | Dispute evidence bucket | `dispute-evidence` |
+| `MINIO_SIGNED_URL_EXPIRY_SECONDS` | Signed URL lifetime from 60 to 3600 seconds | `900` |
+
+Use `.env.example` for local development only. Production credentials must come
+from the deployment environment or a secrets manager.
+
+## Storage Access
+
+Buckets remain private. The storage client creates time-limited signed upload
+and download URLs so clients do not receive MinIO credentials or permanent
+public access.
+
+## Quality Checks
 
 From `services/media-service`:
 
 ```bash
-python -m pytest
+python -m ruff check .
+python -m ruff format --check .
+python -m pytest -m "not integration"
 ```
+
+Run the MinIO integration test while the local infrastructure is running:
+
+```bash
+python -m pytest -m integration
+```
+
+The integration test verifies authenticated object upload, denied anonymous
+access, and successful access through a signed URL.
 
 ## Docker
 
-From the repository root:
+Build from the repository root:
 
 ```bash
 docker build -f services/media-service/Dockerfile -t toolshare-media-service services/media-service
-docker run --rm -p 8000:8000 toolshare-media-service
 ```
 
-Health check path:
+On Docker Desktop, run the container against MinIO running on the host:
 
-```text
-/health
+```bash
+docker run --rm -p 8000:8000 --env-file services/media-service/.env.example -e MINIO_ENDPOINT=host.docker.internal:9000 toolshare-media-service
 ```
 
-Then open:
+On Linux, also map the host gateway:
 
-```text
-http://localhost:8000/health
-http://localhost:8000/docs
+```bash
+docker run --rm -p 8000:8000 --add-host=host.docker.internal:host-gateway --env-file services/media-service/.env.example -e MINIO_ENDPOINT=host.docker.internal:9000 toolshare-media-service
 ```
 
-## Creating A New Service From This Template
-
-1. Copy `services/media-service` to `services/<service-name>`.
-2. Inside the copied folder, search for `media-service` and replace it with `<service-name>`.
-3. Keep health checks, config validation, structured logging, tests, and Docker support.
-4. Add service-specific routes and business logic only in the copied service.
+The image runs as a non-root user. Its health check endpoint is `/health`.
