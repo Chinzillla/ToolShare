@@ -2,7 +2,10 @@ name: toolshare-infra
 
 services:
   postgres:
-    image: postgres:18.4-trixie
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: toolshare-postgres:local
     container_name: toolshare-postgres
     environment:
       POSTGRES_USER: toolshare
