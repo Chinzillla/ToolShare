@@ -4,14 +4,14 @@ description: Configure the repository Node.js and pnpm versions
 runs:
   using: composite
   steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v6
-      with:
-        node-version: 24
-        cache: pnpm
-
     - name: Setup pnpm
       shell: bash
       run: |
         corepack enable
         corepack prepare pnpm@11.1.2 --activate
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: pnpm

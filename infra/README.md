@@ -39,6 +39,29 @@ docker compose -f infra/docker-compose.yml down -v
 | Mailpit SMTP | Local SMTP server | `localhost:1025` |
 | Mailpit UI | Local email inbox | `http://localhost:8025` |
 
+## Service Databases
+
+| Service | Database | Owner |
+|---|---|---|
+| User | `toolshare_user_db` | `toolshare_user_service` |
+| Catalog | `toolshare_catalog_db` | `toolshare_catalog_service` |
+| Booking | `toolshare_booking_db` | `toolshare_booking_service` |
+| Payment | `toolshare_payment_db` | `toolshare_payment_service` |
+| Review | `toolshare_review_db` | `toolshare_review_service` |
+| Notification | `toolshare_notification_db` | `toolshare_notification_service` |
+| Admin | `toolshare_admin_db` | `toolshare_admin_service` |
+| Risk | `toolshare_risk_db` | `toolshare_risk_service` |
+
+Each service owns and connects only to its own database.
+
+## Database Commands
+
+Reset all local service databases:
+
+```shell
+pnpm db:reset --yes
+```
+
 ## Local Credentials
 
 These credentials are for local development only. Do not reuse them in deployed environments.

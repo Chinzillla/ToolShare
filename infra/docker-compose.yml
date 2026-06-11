@@ -2,7 +2,10 @@ name: toolshare-infra
 
 services:
   postgres:
-    image: postgres:18.4-trixie
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: toolshare-postgres:local
     container_name: toolshare-postgres
     environment:
       POSTGRES_USER: toolshare
@@ -13,7 +16,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql
-      - ./postgres:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U toolshare -d toolshare"]
       interval: 10s

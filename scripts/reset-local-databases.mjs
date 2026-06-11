@@ -58,6 +58,7 @@ run('docker', [
   'up',
   '-d',
   '--wait',
+  '--build',
   'postgres',
 ]);
 
