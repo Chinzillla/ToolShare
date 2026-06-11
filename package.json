@@ -6,6 +6,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:reset": "node scripts/reset-local-databases.mjs"
   },
   "keywords": [],
   "author": "",
