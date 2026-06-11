@@ -2,8 +2,16 @@ name: Service Templates CI
 
 on:
   pull_request:
+    branches:
+      - main
   push:
+    branches:
+      - main
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
