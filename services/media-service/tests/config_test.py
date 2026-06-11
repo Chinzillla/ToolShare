@@ -45,3 +45,29 @@ def test_missing_config_fails(monkeypatch):
 
     with pytest.raises(RuntimeError, match="Invalid service configuration"):
         load_settings()
+
+def test_minio_config_loads():
+    settings = load_settings()
+
+    assert settings.minio_endpoint == "http://localhost:9000"
+    assert settings.minio_use_ssl is False
+    assert settings.minio_equipment_photos_bucket == "equipment-photos"
+    assert settings.minio_pickup_photos_bucket == "pickup-photos"
+    assert settings.minio_return_photos_bucket == "return-photos"
+    assert settings.minio_dispute_evidence_bucket == "dispute-evidence"
+    assert settings.minio_signed_url_expiry_seconds == 900
+
+
+def test_missing_bucket_config_fails(monkeypatch):
+    monkeypatch.delenv("MINIO_EQUIPMENT_PHOTOS_BUCKET")
+
+    with pytest.raises(RuntimeError, match="Invalid service configuration"):
+        load_settings()
+
+
+@pytest.mark.parametrize("expiry", ["59", "3601"])
+def test_invalid_signed_url_expiry_fails(monkeypatch, expiry):
+    monkeypatch.setenv("MINIO_SIGNED_URL_EXPIRY_SECONDS", expiry)
+
+    with pytest.raises(RuntimeError, match="Invalid service configuration"):
+        load_settings()

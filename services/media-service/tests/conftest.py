@@ -1,5 +1,10 @@
 import os
 
+os.environ.setdefault("SERVICE_NAME", "media-service")
+os.environ.setdefault("ENVIRONMENT", "test")
+os.environ.setdefault("PORT", "8000")
+os.environ.setdefault("LOG_LEVEL", "INFO")
+
 os.environ.setdefault("MINIO_ENDPOINT", "http://localhost:9000")
 os.environ.setdefault("MINIO_ACCESS_KEY", "test-access-key")
 os.environ.setdefault("MINIO_SECRET_KEY", "test-secret-key")
