@@ -5,7 +5,7 @@ This directory is a reusable FastAPI template for Python services
 ## Environment
 
 ```env
-SERVICE_NAME=fastapi-template
+SERVICE_NAME=search-service
 ENVIRONMENT=development
 PORT=8000
 LOG_LEVEL=INFO
@@ -17,7 +17,7 @@ Valid `LOG_LEVEL` values are `DEBUG`, `INFO`, `WARNING`, `ERROR`, and `CRITICAL`
 
 ## Local Development
 
-From `services/fastapi-template`:
+From `services/search-service`:
 
 ```bash
 python -m venv .venv
@@ -37,7 +37,7 @@ http://localhost:8000/openapi.json
 
 ## Tests
 
-From `services/fastapi-template`:
+From `services/search-service`:
 
 ```bash
 python -m pytest
@@ -48,8 +48,8 @@ python -m pytest
 From the repository root:
 
 ```bash
-docker build -f services/fastapi-template/Dockerfile -t toolshare-fastapi-template services/fastapi-template
-docker run --rm -p 8000:8000 toolshare-fastapi-template
+docker build -f services/search-service/Dockerfile -t toolshare-search-service services/search-service
+docker run --rm -p 8000:8000 toolshare-search-service
 ```
 
 Health check path:
@@ -67,7 +67,7 @@ http://localhost:8000/docs
 
 ## Creating A New Service From This Template
 
-1. Copy `services/fastapi-template` to `services/<service-name>`.
-2. Inside the copied folder, search for `fastapi-template` and replace it with `<service-name>`.
+1. Copy `services/search-service` to `services/<service-name>`.
+2. Inside the copied folder, search for `search-service` and replace it with `<service-name>`.
 3. Keep health checks, config validation, structured logging, tests, and Docker support.
 4. Add service-specific routes and business logic only in the copied service.
