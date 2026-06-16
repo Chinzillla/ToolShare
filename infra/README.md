@@ -4,13 +4,13 @@ This Compose stack starts the local infrastructure dependencies used by ToolShar
 
 ## Start
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml up -d
 ```
 
 ## Stop
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml down
 ```
 
@@ -18,7 +18,7 @@ docker compose -f infra/docker-compose.yml down
 
 This removes containers and local volumes.
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml down -v
 ```
 
@@ -76,24 +76,47 @@ These credentials are for local development only. Do not reuse them in deployed 
 
 Check container health:
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml ps
 ```
 
 Check OpenSearch:
 
-```powershell
+```shell
 curl.exe --insecure --user admin:ToolshareLocal123! https://localhost:9200/_cluster/health
 ```
 
 Check MinIO:
 
-```powershell
+```shell
 curl.exe -i http://localhost:9000/minio/health/live
 ```
 
-Check Temporal:
+Validate Temporal locally:
 
-```powershell
-docker exec toolshare-temporal temporal operator cluster health --address localhost:7233
+```shell
+corepack pnpm --filter @toolshare/temporal-sample-worker typecheck
+docker compose -f infra/docker-compose.yml up -d temporal
+docker exec toolshare-temporal temporal operator namespace list --address localhost:7233
+```
+
+## Temporal Sample Worker
+
+Local Temporal uses the `default` namespace and the `booking-local` task queue.
+
+Start the worker from the repository root:
+
+```shell
+corepack pnpm --filter @toolshare/temporal-sample-worker worker
+```
+
+In another terminal, start a sample workflow:
+
+```shell
+corepack pnpm --filter @toolshare/temporal-sample-worker start:workflow
+```
+
+Open the Temporal UI:
+```shell
+http://localhost:8233
 ```

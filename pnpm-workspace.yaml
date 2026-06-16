@@ -6,4 +6,7 @@ packages:
 savePrefix: ''
 allowBuilds:
   '@nestjs/core': true
+  '@swc/core': true
+  esbuild: true
+  protobufjs: true
   unrs-resolver: true
