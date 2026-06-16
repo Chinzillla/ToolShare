@@ -7,7 +7,8 @@
   "main": "index.js",
   "scripts": {
     "db:reset": "node scripts/reset-local-databases.mjs",
-    "db:test": "node --test scripts/test-local-databases.mjs"
+    "db:test": "node --test scripts/test-local-databases.mjs",
+    "search:index:bootstrap": "node scripts/bootstrap-opensearch-indexes.mjs"
   },
   "keywords": [],
   "author": "",
