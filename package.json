@@ -10,6 +10,7 @@
     "db:test": "node --test scripts/test-local-databases.mjs",
     "search:index:bootstrap": "node scripts/bootstrap-opensearch-indexes.mjs",
     "k8s:create": "node scripts/create-local-k8s.mjs",
+    "k8s:check": "kubectl get pods -A",
     "k8s:delete": "node scripts/delete-local-k8s.mjs"
   },
   "keywords": [],
