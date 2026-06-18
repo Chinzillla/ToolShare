@@ -124,6 +124,8 @@ Users can view:
 
 ## Development Commands
 
+GitHub Actions and local `act` commands are documented in [GitHub Actions](docs/github-actions.md).
+
 ### TypeScript services
 
 Run lint checks:
