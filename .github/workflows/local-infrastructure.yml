@@ -1,0 +1,43 @@
+name: Local Infrastructure CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  database-infrastructure:
+    name: Database Infrastructure
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Initialize service databases
+        run: node scripts/reset-local-databases.mjs --yes
+
+      - name: Test database ownership boundaries
+        run: node --test scripts/test-local-databases.mjs
+
+      - name: Clean up database infrastructure
+        if: always()
+        run: |
+          docker compose -f infra/docker-compose.yml rm -sf postgres
+          docker volume rm toolshare-infra_postgres-data || true

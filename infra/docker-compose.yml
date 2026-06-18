@@ -2,7 +2,10 @@ name: toolshare-infra
 
 services:
   postgres:
-    image: postgres:18.4-trixie
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: toolshare-postgres:local
     container_name: toolshare-postgres
     environment:
       POSTGRES_USER: toolshare
@@ -131,6 +134,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    
+  minio-bootstrap:
+    build:
+      context: ./minio
+      dockerfile: Dockerfile
+    image: toolshare-minio-bootstrap:local
+    container_name: toolshare-minio-bootstrap
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: toolshare
+      MINIO_ROOT_PASSWORD: toolshare-local-minio
+      EQUIPMENT_PHOTOS_BUCKET: equipment-photos
+      PICKUP_PHOTOS_BUCKET: pickup-photos
+      RETURN_PHOTOS_BUCKET: return-photos
+      DISPUTE_EVIDENCE_BUCKET: dispute-evidence
+    restart: "no"
 
   mailpit:
     image: axllent/mailpit:v1.29

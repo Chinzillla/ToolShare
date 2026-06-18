@@ -1,8 +1,13 @@
 # ToolShare
 Tool sharing marketplace
+
 # Toolshare
 
 This project is an open source tool rental platform that helps people rent out tools they already own and helps others access tools without needing to buy them.
+
+## Architecture
+
+![architecture](backend_architecture.png)
 
 ## Vision
 
@@ -119,23 +124,25 @@ Users can view:
 
 ## Development Commands
 
+GitHub Actions and local `act` commands are documented in [GitHub Actions](docs/github-actions.md).
+
 ### TypeScript services
 
 Run lint checks:
 
-```powershell
+```shell
 corepack pnpm --filter @toolshare/nestjs-template lint:check
 ```
 
 Run formatting checks:
 
-```powershell
+```shell
 corepack pnpm --filter @toolshare/nestjs-template format:check
 ```
 
 Apply formatting:
 
-```powershell
+```shell
 corepack pnpm --filter @toolshare/nestjs-template format
 ```
 
@@ -164,6 +171,18 @@ Apply formatting:
 
 ```powershell
 .venv\Scripts\python.exe -m ruff format .
+```
+
+### Database Services
+
+Reset Local Databases:
+```shell
+pnpm db:reset --yes
+```
+
+Run Database Integration Test:
+```shell
+pnpm db:test
 ```
 
 ## Contributing

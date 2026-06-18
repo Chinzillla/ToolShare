@@ -4,13 +4,13 @@ This Compose stack starts the local infrastructure dependencies used by ToolShar
 
 ## Start
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml up -d
 ```
 
 ## Stop
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml down
 ```
 
@@ -18,7 +18,7 @@ docker compose -f infra/docker-compose.yml down
 
 This removes containers and local volumes.
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml down -v
 ```
 
@@ -39,6 +39,29 @@ docker compose -f infra/docker-compose.yml down -v
 | Mailpit SMTP | Local SMTP server | `localhost:1025` |
 | Mailpit UI | Local email inbox | `http://localhost:8025` |
 
+## Service Databases
+
+| Service | Database | Owner |
+|---|---|---|
+| User | `toolshare_user_db` | `toolshare_user_service` |
+| Catalog | `toolshare_catalog_db` | `toolshare_catalog_service` |
+| Booking | `toolshare_booking_db` | `toolshare_booking_service` |
+| Payment | `toolshare_payment_db` | `toolshare_payment_service` |
+| Review | `toolshare_review_db` | `toolshare_review_service` |
+| Notification | `toolshare_notification_db` | `toolshare_notification_service` |
+| Admin | `toolshare_admin_db` | `toolshare_admin_service` |
+| Risk | `toolshare_risk_db` | `toolshare_risk_service` |
+
+Each service owns and connects only to its own database.
+
+## Database Commands
+
+Reset all local service databases:
+
+```shell
+pnpm db:reset --yes
+```
+
 ## Local Credentials
 
 These credentials are for local development only. Do not reuse them in deployed environments.
@@ -53,24 +76,77 @@ These credentials are for local development only. Do not reuse them in deployed 
 
 Check container health:
 
-```powershell
+```shell
 docker compose -f infra/docker-compose.yml ps
-```
-
-Check OpenSearch:
-
-```powershell
-curl.exe --insecure --user admin:ToolshareLocal123! https://localhost:9200/_cluster/health
 ```
 
 Check MinIO:
 
-```powershell
+```shell
 curl.exe -i http://localhost:9000/minio/health/live
 ```
 
-Check Temporal:
+### OpenSearch
 
-```powershell
-docker exec toolshare-temporal temporal operator cluster health --address localhost:7233
+OpenSearch stores local search indexes used by development services. It is not the source of truth for application data.
+
+Start OpenSearch and Dashboards:
+
+```shell
+docker compose -f infra/docker-compose.yml up -d opensearch opensearch-dashboards
+```
+
+Check container status:
+
+```shell
+docker compose -f infra/docker-compose.yml ps opensearch opensearch-dashboards
+```
+
+Check cluster health:
+
+```shell
+curl.exe --insecure --user admin:ToolshareLocal123! https://localhost:9200/_cluster/health
+```
+
+Bootstrap local indexes:
+
+```shell
+corepack pnpm search:index:bootstrap
+```
+
+The bootstrap command creates the `equipment-listings` index if it does not already exist. It is safe to run more than once.
+
+Open Dashboards:
+
+```text
+http://localhost:5601
+```
+
+### Temporal Sample Worker
+
+#### Validate Temporal locally:
+
+```shell
+corepack pnpm --filter @toolshare/temporal-sample-worker typecheck
+docker compose -f infra/docker-compose.yml up -d temporal
+docker exec toolshare-temporal temporal operator namespace list --address localhost:7233
+```
+
+Local Temporal uses the `default` namespace and the `booking-local` task queue.
+
+#### Start the worker from the repository root:
+
+```shell
+corepack pnpm --filter @toolshare/temporal-sample-worker worker
+```
+
+In another terminal, start a sample workflow:
+
+```shell
+corepack pnpm --filter @toolshare/temporal-sample-worker start:workflow
+```
+
+Open the Temporal UI:
+```shell
+http://localhost:8233
 ```

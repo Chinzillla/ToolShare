@@ -1,0 +1,71 @@
+name: Search Service CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  search-service:
+    name: Search Service
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14.3"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        working-directory: services/search-service
+        run: pip install -r requirements-dev.txt
+
+      - name: Check Python lint
+        working-directory: services/search-service
+        run: python -m ruff check .
+
+      - name: Check Python formatting
+        working-directory: services/search-service
+        run: python -m ruff format --check .
+
+      - name: Run unit tests
+        working-directory: services/search-service
+        run: python -m pytest -m "not integration"
+
+      - name: Start OpenSearch
+        run: docker compose -f infra/docker-compose.yml up -d --wait opensearch
+
+      - name: Bootstrap OpenSearch indexes
+        run: node scripts/bootstrap-opensearch-indexes.mjs
+
+      - name: Run OpenSearch integration tests
+        working-directory: services/search-service
+        run: python -m pytest -m integration
+
+      - name: Build Docker image
+        run: docker build -f services/search-service/Dockerfile -t toolshare-search-service services/search-service
+
+      - name: Clean up OpenSearch
+        if: always()
+        run: |
+          docker compose -f infra/docker-compose.yml rm -sf opensearch
+          docker volume rm toolshare-infra_opensearch-data || true
