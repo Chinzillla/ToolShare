@@ -2,6 +2,19 @@ import pytest
 
 from app.config import load_settings
 
+CONFIG_ENV_KEYS = (
+    "SERVICE_NAME",
+    "ENVIRONMENT",
+    "PORT",
+    "LOG_LEVEL",
+    "OPENSEARCH_URL",
+    "OPENSEARCH_USERNAME",
+    "OPENSEARCH_PASSWORD",
+    "OPENSEARCH_INDEX_EQUIPMENT_LISTINGS",
+    "OPENSEARCH_VERIFY_CERTS",
+)
+
+
 def set_required_config(monkeypatch):
     monkeypatch.setenv("SERVICE_NAME", "search-service")
     monkeypatch.setenv("ENVIRONMENT", "development")
@@ -12,6 +25,7 @@ def set_required_config(monkeypatch):
     monkeypatch.setenv("OPENSEARCH_PASSWORD", "ToolshareLocal123!")
     monkeypatch.setenv("OPENSEARCH_INDEX_EQUIPMENT_LISTINGS", "equipment-listings")
     monkeypatch.setenv("OPENSEARCH_VERIFY_CERTS", "false")
+
 
 def test_default_config_loads(monkeypatch):
     set_required_config(monkeypatch)
@@ -34,34 +48,28 @@ def test_invalid_port_fails(monkeypatch):
     monkeypatch.setenv("PORT", "not-a-number")
 
     with pytest.raises(RuntimeError, match="Invalid service configuration"):
-        load_settings()
+        load_settings(env_file=None)
 
 
 def test_invalid_environment_fails(monkeypatch):
-    monkeypatch.setenv("SERVICE_NAME", "search-service")
+    set_required_config(monkeypatch)
     monkeypatch.setenv("ENVIRONMENT", "staging")
-    monkeypatch.setenv("PORT", "8000")
-    monkeypatch.setenv("LOG_LEVEL", "INFO")
-    monkeypatch.delenv("OPENSEARCH_URL", raising=False)
-    monkeypatch.delenv("OPENSEARCH_USERNAME", raising=False)
-    monkeypatch.delenv("OPENSEARCH_PASSWORD", raising=False)
-    monkeypatch.delenv("OPENSEARCH_INDEX_EQUIPMENT_LISTINGS", raising=False)
-    monkeypatch.delenv("OPENSEARCH_VERIFY_CERTS", raising=False)
 
     with pytest.raises(RuntimeError, match="Invalid service configuration"):
-        load_settings()
+        load_settings(env_file=None)
 
 
 def test_missing_config_fails(monkeypatch):
-    monkeypatch.setenv("SERVICE_NAME", "search-service")
-    monkeypatch.setenv("ENVIRONMENT", "staging")
-    monkeypatch.setenv("PORT", "8000")
-    monkeypatch.setenv("LOG_LEVEL", "INFO")
-    monkeypatch.delenv("OPENSEARCH_URL", raising=False)
-    monkeypatch.delenv("OPENSEARCH_USERNAME", raising=False)
-    monkeypatch.delenv("OPENSEARCH_PASSWORD", raising=False)
-    monkeypatch.delenv("OPENSEARCH_INDEX_EQUIPMENT_LISTINGS", raising=False)
-    monkeypatch.delenv("OPENSEARCH_VERIFY_CERTS", raising=False)
+    for key in CONFIG_ENV_KEYS:
+        monkeypatch.delenv(key, raising=False)
 
     with pytest.raises(RuntimeError, match="Invalid service configuration"):
-        load_settings()
+        load_settings(env_file=None)
+
+
+def test_missing_opensearch_config_fails(monkeypatch):
+    set_required_config(monkeypatch)
+    monkeypatch.delenv("OPENSEARCH_URL", raising=False)
+
+    with pytest.raises(RuntimeError, match="Invalid service configuration"):
+        load_settings(env_file=None)

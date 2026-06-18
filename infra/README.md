@@ -88,12 +88,38 @@ curl.exe -i http://localhost:9000/minio/health/live
 
 ### OpenSearch
 
-#### Validate OpenSearch locally:
+OpenSearch stores local search indexes used by development services. It is not the source of truth for application data.
+
+Start OpenSearch and Dashboards:
 
 ```shell
 docker compose -f infra/docker-compose.yml up -d opensearch opensearch-dashboards
+```
+
+Check container status:
+
+```shell
 docker compose -f infra/docker-compose.yml ps opensearch opensearch-dashboards
+```
+
+Check cluster health:
+
+```shell
 curl.exe --insecure --user admin:ToolshareLocal123! https://localhost:9200/_cluster/health
+```
+
+Bootstrap local indexes:
+
+```shell
+corepack pnpm search:index:bootstrap
+```
+
+The bootstrap command creates the `equipment-listings` index if it does not already exist. It is safe to run more than once.
+
+Open Dashboards:
+
+```text
+http://localhost:5601
 ```
 
 ### Temporal Sample Worker

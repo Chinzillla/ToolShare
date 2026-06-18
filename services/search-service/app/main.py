@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request
 from app.config import settings
 from app.logging import configure_logging
 from app.routes.health import router as health_router
+from app.routes.search import router as search_router
 
 configure_logging()
 
@@ -15,6 +16,7 @@ app = FastAPI(
 )
 
 app.include_router(health_router)
+app.include_router(search_router)
 
 logger = logging.getLogger("app.request")
 
