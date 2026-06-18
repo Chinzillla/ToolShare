@@ -1,8 +1,13 @@
 # ToolShare
 Tool sharing marketplace
+
 # Toolshare
 
 This project is an open source tool rental platform that helps people rent out tools they already own and helps others access tools without needing to buy them.
+
+## Architecture
+
+![architecture](backend_architecture.png)
 
 ## Vision
 
